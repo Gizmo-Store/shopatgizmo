@@ -668,6 +668,14 @@ const PER=8;
 // Robust HTML Escaping function against XSS injection
 const esc = (t) => (t || '').toString().replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
+/* ဖုန်းနံပါတ် ညှိနှိုင်းပေးသည့် Logic (Tracking Error Fix) */
+function normalizePhone(p) {
+  let s = (p || '').toString().replace(/[-.\s+]/g, '');
+  if (s.startsWith('959')) return '09' + s.substring(3);
+  if (s.startsWith('9')) return '0' + s;
+  return s;
+}
+
 /* Slider အစပြုခြင်း - % ဖြင့် Drag Logic ပြင်ဆင်ထားသည် */
 function initSlider() {
   const track = document.getElementById('sliderTrack');
@@ -974,7 +982,10 @@ function patchCards(products){
     el.dataset.desc = (item.desc || '').toString();
     
     const imgEl = el.querySelector('img');
-    if (imgEl) imgEl.src = esc(item.img);
+    if (imgEl) {
+      imgEl.src = esc(item.img);
+      imgEl.onerror = function() { this.onerror=null; this.src=fallbackImg; }; // Image link error ပြေလည်စေရန်
+    }
     
     const brandEl = el.querySelector('.card-brand');
     if (brandEl) brandEl.textContent = esc(item.brand);
@@ -1059,7 +1070,7 @@ function onSearch(){
 function clearSearch(){
   document.getElementById('searchBar').value = '';
   document.getElementById('clearBtn').style.display = 'none';
-  document.getElementById('searchBar').focus(); // Add User Experience fix
+  document.getElementById('searchBar').focus(); 
   
   const hero = document.getElementById('mainSlider');
   if (hero) hero.style.display = 'block'; 
@@ -1134,33 +1145,23 @@ function doPlatform(p){
 
 function doTrack(){
   const raw = document.getElementById('trackInp').value.trim();
-  const clean = raw.replace(/[-.\s]/g, ''); 
+  const clean = normalizePhone(raw); 
   
-  // မြန်မာဖုန်းနံပါတ် ၆ လုံးမှ ၉ လုံးအထိ လက်ခံမည့် Regex
-  const phoneRegex = /^(09|\+959)\d{6,9}$/;
-  if (!phoneRegex.test(clean)) { 
+  if (!clean || clean.length < 9 || !clean.startsWith('09')) { 
     toast('ဖုန်းနံပါတ် မှန်ကန်မှုမရှိပါ (သို့) ပါဆယ်စာရင်း မရှိသေးပါ။'); 
     return; 
   }
   
-  // Data Sheet က ဖုန်းနံပါတ် 0 ပျောက်နေရင် ဖြေရှင်းခြင်း
-  const rows = trackingData.filter(r => {
-    let sheetPhone = (r.phone || '').toString().replace(/[-.\s]/g, '');
-    if (sheetPhone.startsWith('9')) sheetPhone = '0' + sheetPhone; 
-    return sheetPhone === clean;
-  });
+  const rows = trackingData.filter(r => normalizePhone(r.phone) === clean);
   
   if (!rows.length) { 
     toast('ဖုန်းနံပါတ် မှန်ကန်မှုမရှိပါ (သို့) ပါဆယ်စာရင်း မရှိသေးပါ။'); 
     return; 
   }
 
-  // Data Masking - လုံခြုံရေးအတွက် ဖုန်းနံပါတ်ကို ဖုံးကွယ်ပြသခြင်း
   let maskedPhone = clean;
-  if(clean.startsWith('09') && clean.length >= 9) {
+  if(clean.length >= 9) {
     maskedPhone = clean.substring(0, 4) + '****' + clean.substring(clean.length - 3);
-  } else if(clean.startsWith('+959') && clean.length >= 11) {
-    maskedPhone = clean.substring(0, 6) + '****' + clean.substring(clean.length - 3);
   }
 
   document.getElementById('res-name').innerText = rows[0].name || 'Customer';
