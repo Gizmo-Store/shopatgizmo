@@ -134,16 +134,19 @@
       position:absolute; right:8px; top:50%; transform:translateY(-50%); 
       font-size:18px; color:var(--c-muted); cursor:pointer; display:none; 
       transition:color .2s, transform .2s, background .2s; width: 28px; height: 28px; 
-      line-height: 24px; text-align: center; border-radius: 50%; z-index: 10;
+      line-height: 24px; text-align: center; border-radius: 50%; z-index: 10; border: none; background: transparent;
     }
     .hdr-search .x-btn:hover {color:var(--c-brand); background: var(--c-surf3);}
 
-    /* ── Main Slider ── */
+    /* ── Main Slider (Responsive Aspect Ratios) ── */
     .main-slider {
-      position: relative; width: 100%; aspect-ratio: 21/9;
+      position: relative; width: 100%; 
+      aspect-ratio: 16/9; /* Mobile Default */
       background: var(--c-surf3); overflow: hidden; touch-action: pan-y; 
     }
-    @media (max-width: 640px) { .main-slider { aspect-ratio: 16/9; } }
+    @media (min-width: 640px) { .main-slider { aspect-ratio: 21/9; } }
+    @media (min-width: 1024px) { .main-slider { aspect-ratio: 24/9; max-height: 480px; } }
+    
     .slider-track {
       display: flex; width: 100%; height: 100%; will-change: transform; cursor: grab;
     }
@@ -446,7 +449,7 @@
 
 <div class="main-slider" id="mainSlider">
   <div class="slider-track" id="sliderTrack">
-    <img class="slide" src="https://res.cloudinary.com/dfuyt9ycz/image/upload/q_auto/f_auto/v1781947577/1_f6zfbx.jpg" alt="Promo 1" loading="lazy" draggable="false">
+    <img class="slide" src="https://res.cloudinary.com/dfuyt9ycz/image/upload/q_auto/f_auto/v1781947577/1_f6zfbx.jpg" alt="Promo 1" fetchpriority="high" draggable="false">
     <img class="slide" src="https://res.cloudinary.com/dfuyt9ycz/image/upload/q_auto/f_auto/v1781947636/2_nmwfoz.jpg" alt="Promo 2" loading="lazy" draggable="false">
     <img class="slide" src="https://res.cloudinary.com/dfuyt9ycz/image/upload/q_auto/f_auto/v1781947641/3_rt259j.jpg" alt="Promo 3" loading="lazy" draggable="false">
     <img class="slide" src="https://res.cloudinary.com/dfuyt9ycz/image/upload/q_auto/f_auto/v1781947646/4_k7d1fg.jpg" alt="Promo 4" loading="lazy" draggable="false">
@@ -531,9 +534,17 @@
     <div class="modal-divider"></div>
     <div style="font-size:14px; line-height:1.8; color:var(--c-sub); text-align: left;">
       <h4 style="color:var(--c-text); margin-bottom:6px; font-size:15px; font-weight:800;">Curated for the Tech Elite. Established 2017.</h4>
-      <p style="margin-bottom:20px;">Since our inception in 2017, Gizmo has been the premier destination for high-end mobile accessories, premium IT products, luxury gadgets, and elite Everyday Carry (EDC) gear.</p>
+      <p style="margin-bottom:20px;">Since our inception in 2017, Gizmo has been the premier destination for high-end mobile accessories, premium IT products, luxury gadgets, and elite Everyday Carry (EDC) gear. We cater exclusively to a niche community of tech enthusiasts, geeks, and professionals who demand nothing less than perfection from their tools.</p>
+
+      <h4 style="color:var(--c-text); margin-bottom:6px; font-size:15px; font-weight:800;">The Pioneer of Premium Gear in Myanmar</h4>
+      <p style="margin-bottom:20px;">We don’t just follow the market; we shaped it. As a true pioneer in Myanmar, Gizmo was the very first to introduce many of the world’s most coveted premium brands and cutting-edge tech subcultures to the country. We laid the groundwork, opening the door for local enthusiasts to access elite gear that was once impossible to find locally. When it comes to high-end EDC and specialized tech lifestyle goods, we were the first to break the mold—and we continue to lead the way.</p>
+
       <h4 style="color:var(--c-text); margin-bottom:6px; font-size:15px; font-weight:800;">Guaranteed Authenticity. Premium Craftsmanship.</h4>
-      <p style="margin-bottom:20px;">Every item in our catalog is guaranteed 100% authentic, sourced directly to meet the exacting standards of our affluent clientele.</p>
+      <p style="margin-bottom:20px;">We believe that true luxury lies in authenticity and premium engineering. Every item in our catalog is guaranteed 100% authentic, sourced directly to meet the exacting standards of our affluent clientele. We specialize in world-class brands known for their minimalist aesthetics and structural mastery, such as <em>Alpaka, Bellroy, Aer, and Nomatic</em>.</p>
+
+      <h4 style="color:var(--c-text); margin-bottom:6px; font-size:15px; font-weight:800;">The Pinnacle of What’s Next</h4>
+      <p style="margin-bottom:24px;">We don’t follow trends; we deliver the future. Our inventory is continuously updated to feature only the newest, most advanced releases on the global market. If you are looking for the absolute latest in tech innovation and premium lifestyle gear, Gizmo remains your definitive, original source.</p>
+
       <p style="font-weight:700; color:var(--c-brand); text-align:center; font-size:15px; margin-bottom:12px;">For those who live on the cutting edge—welcome to your ultimate gear collective.</p>
     </div>
     <button class="btn-secondary" onclick="closeMod('about-modal')">Close</button>
@@ -579,7 +590,7 @@
     <div class="modal-drag"></div>
     <button class="modal-x" onclick="closeMod('track-modal')" aria-label="Close">&times;</button>
     <div class="modal-title">📦 Track Your Order</div>
-    <div class="modal-desc">သင့်ရဲ့ Phone Number ထည့်ပြီး ပါဆယ် အခြေအနေ စစ်ဆေးပါ</div>
+    <div class="modal-desc">Instock နှင့် Preorder Parcel အခြေအနေများကို စစ်ဆေးရန် Phone Number ထည့်ပါ</div>
     <input class="inp" id="trackInp" type="tel" placeholder="09xxxxxxxxx" onkeypress="if(event.key==='Enter')doTrack()">
     <button class="btn-primary" style="width: 100%;" onclick="doTrack()">Track Shipment</button>
   </div>
@@ -662,7 +673,6 @@ function initSlider() {
   firstClone.id = 'first-clone';
   lastClone.id = 'last-clone';
   
-  // မျက်မမြင်အသုံးပြုသူများအတွက် (A11y Fix)
   firstClone.setAttribute('aria-hidden', 'true');
   lastClone.setAttribute('aria-hidden', 'true');
 
@@ -673,7 +683,6 @@ function initSlider() {
   let sliderInterval;
   let isDragging = false;
   let startPos = 0;
-  let prevTranslate = 0;
   let isTransitioning = false; 
 
   track.style.transform = `translateX(-${currentSlide * 100}%)`;
@@ -761,7 +770,6 @@ function initSlider() {
     if (isTransitioning) return;
     isDragging = true;
     startPos = getPositionX(e);
-    prevTranslate = -currentSlide * track.clientWidth;
     track.style.transition = 'none'; 
     clearInterval(sliderInterval); 
   }
@@ -770,7 +778,8 @@ function initSlider() {
     if (!isDragging) return;
     const currentPosition = getPositionX(e);
     const diff = currentPosition - startPos;
-    track.style.transform = `translateX(${prevTranslate + diff}px)`;
+    const diffPercent = (diff / track.clientWidth) * 100;
+    track.style.transform = `translateX(calc(-${currentSlide * 100}% + ${diffPercent}%))`;
   }
 
   function dragEnd(e) {
@@ -785,8 +794,10 @@ function initSlider() {
       endPos = startPos; 
     }
     const movedBy = endPos - startPos;
-    if (movedBy < -50) goToSlide(currentSlide + 1);
-    else if (movedBy > 50) goToSlide(currentSlide - 1);
+    
+    // Adjusted Swipe Threshold
+    if (movedBy < -40) goToSlide(currentSlide + 1);
+    else if (movedBy > 40) goToSlide(currentSlide - 1);
     else goToSlide(currentSlide);
   }
   
@@ -855,7 +866,7 @@ async function fetchProducts(){
     if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
     const data = await res.json();
     
-    setCache(data); // အသစ်ရလာသော data များကို သိမ်းဆည်းခြင်း
+    setCache(data);
     
     trackingData = data.tracking || [];
     const domCount = document.querySelectorAll('.prd-card').length;
@@ -871,13 +882,14 @@ async function fetchProducts(){
     if (!cacheData && !cardsBuilt) {
       const grid = document.getElementById('productGrid');
       if (grid) {
+        grid.style.display = 'block'; 
         grid.innerHTML = `
-          <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+          <div style="text-align: center; padding: 60px 20px; border-radius: 20px; background: var(--c-surface); border: 1px solid var(--c-border); box-shadow: var(--sh-sm);">
             <div style="font-size: 40px; margin-bottom: 12px;">📶</div>
             <h3 style="margin-bottom: 8px; color: var(--c-text);">Connection Failed</h3>
             <p style="color: var(--c-muted); font-size: 14px;">
               Please check your internet connection and refresh the page.<br>
-              <button onclick="window.location.reload()" style="margin-top: 16px; padding: 8px 16px; border-radius: 50px; background: var(--c-surf2); border: 1px solid var(--c-border); cursor: pointer;">Try Again</button>
+              <button onclick="window.location.reload()" style="margin-top: 16px; padding: 10px 24px; border-radius: 50px; background: var(--c-surf2); color: var(--c-text); border: 1.5px solid var(--c-border); cursor: pointer; font-weight: 600; transition: all var(--t);">Try Again</button>
             </p>
           </div>
         `;
@@ -890,6 +902,7 @@ async function fetchProducts(){
 
 function buildCards(products){
   const g = document.getElementById('productGrid');
+  g.style.display = ''; // Reset display from error state
   g.innerHTML = '';
   cardsBuilt = true; 
   
@@ -902,7 +915,6 @@ function buildCards(products){
     el.dataset.price = (item.price || '').toString();
     el.dataset.desc = (item.desc || '').toString();
     
-    // လုံခြုံသော ပုံ Link သာ အသုံးပြုခြင်း
     const safeImgSrc = isValidUrl(item.img) ? esc(item.img) : fallbackImg;
     
     el.innerHTML = `
@@ -1015,8 +1027,11 @@ function onSearch(){
 }
 
 function clearSearch(){
-  document.getElementById('searchBar').value = '';
+  const searchInput = document.getElementById('searchBar');
+  searchInput.value = '';
   document.getElementById('clearBtn').style.display = 'none';
+  searchInput.focus(); // Clear ပြီးတာနဲ့ Keyboard တန်းပေါ်ရန် Focus လုပ်ပေးခြင်း
+  
   const hero = document.getElementById('mainSlider');
   if (hero) hero.style.display = 'block'; 
   const activeTab = document.querySelector('.chip.on');
